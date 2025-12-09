@@ -56,15 +56,16 @@ def rename_file(file_id: str, new_name: str) -> Dict[str, Any]:
     return drive.rename_file(file_id, new_name)
 
 @mcp.tool()
-def create_spreadsheet(title: str) -> Dict[str, Any]:
+def create_spreadsheet(title: str, folder: str = None) -> Dict[str, Any]:
     """Create an empty google sheets spreadsheet.
-    
+
     Args:
         title: Title of the new spreadsheet
+        folder: Folder alias or ID (optional, uses default folder if not specified)
     """
     global current_spreadsheet_id
-    logger.info(f"Creating new spreadsheet with title: {title}")
-    result = drive.create_spreadsheet(title)
+    logger.info(f"Creating new spreadsheet with title: {title}, folder: {folder or 'default'}")
+    result = drive.create_spreadsheet(title, folder)
     if result:
         spreadsheet_id = result.get('spreadsheetId') or result.get('id')
         if spreadsheet_id:
@@ -77,15 +78,16 @@ def create_spreadsheet(title: str) -> Dict[str, Any]:
     return result
 
 @mcp.tool()
-def create_spreadsheet_from_template(template_id: str, title: str) -> Dict[str, Any]:
+def create_spreadsheet_from_template(template_id: str, title: str, folder: str = None) -> Dict[str, Any]:
     """Create a new google sheets spreadsheet from a template.
 
     Args:
         template_id: Template ID
         title: Title of the new spreadsheet
+        folder: Folder alias or ID (optional, uses default folder if not specified)
     """
     global current_spreadsheet_id
-    result = drive.create_spreadsheet_from_template(template_id, title)
+    result = drive.create_spreadsheet_from_template(template_id, title, folder)
     if result:
         spreadsheet_id = result.get('spreadsheetId') or result.get('id')
         if spreadsheet_id:
@@ -96,10 +98,16 @@ def create_spreadsheet_from_template(template_id: str, title: str) -> Dict[str, 
     return result
 
 @mcp.tool()
-def create_spreadsheet_from_existing(source_id: str, title: str) -> Dict[str, Any]:
-    """Create a new google sheets spreadsheet by copying an existing one."""
+def create_spreadsheet_from_existing(source_id: str, title: str, folder: str = None) -> Dict[str, Any]:
+    """Create a new google sheets spreadsheet by copying an existing one.
+
+    Args:
+        source_id: Source spreadsheet ID to copy
+        title: Title of the new spreadsheet
+        folder: Folder alias or ID (optional, uses default folder if not specified)
+    """
     global current_spreadsheet_id
-    result = drive.create_spreadsheet_from_existing(source_id, title)
+    result = drive.create_spreadsheet_from_existing(source_id, title, folder)
     if result:
         spreadsheet_id = result.get('spreadsheetId') or result.get('id')
         if spreadsheet_id:

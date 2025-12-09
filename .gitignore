@@ -9,7 +9,9 @@ venv/
 
 # Google API credentials
 key/
-*.json
+client_secret*.json
+*.token.json
+.mcp_google_spreadsheet.json
 
 # IDE specific files
 .idea/
